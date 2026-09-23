@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+import json
 import os
 import subprocess
 from collections.abc import Iterator
@@ -64,7 +65,15 @@ def _finish(settings: Settings, run_id: int, stats: RunStats, status: str, error
     with connect(settings) as conn:
         conn.execute(
             "UPDATE ops.pipeline_runs SET finished_at = now(), rows_received = %s, rows_processed = %s,"
-            " rows_rejected = %s, status = %s, error = %s WHERE run_id = %s",
-            (stats.rows_received, stats.rows_processed, stats.rows_rejected, status, error, run_id),
+            " rows_rejected = %s, reject_reasons = %s::jsonb, status = %s, error = %s WHERE run_id = %s",
+            (
+                stats.rows_received,
+                stats.rows_processed,
+                stats.rows_rejected,
+                json.dumps(stats.reject_reasons),
+                status,
+                error,
+                run_id,
+            ),
         )
         conn.commit()

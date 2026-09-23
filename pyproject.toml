@@ -10,7 +10,9 @@ dependencies = [
     "pymongo>=4.7",
     "pyspark==3.5.5",
     "pyarrow>=16",
+    "shapely>=2.0",
     "streamlit>=1.36",
+    "pandas>=2.2",
 ]
 
 [dependency-groups]
@@ -34,7 +36,7 @@ ignore = ["S101", "RUF012"]  # asserts in tests; class-level dict config on conn
 [tool.mypy]
 python_version = "3.11"
 strict = true
-files = ["homepedia", "processing", "database", "apps", "tests", "ingestion"]
+files = ["homepedia", "processing", "database", "apps", "tests", "ingestion", "analytics"]
 ignore_missing_imports = true
 
 [tool.pytest.ini_options]

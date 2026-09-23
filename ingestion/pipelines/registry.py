@@ -10,6 +10,7 @@ from ingestion.sources.geo_reference import GeoReferenceConnector
 from ingestion.sources.georisques import GeorisquesConnector
 from ingestion.sources.grand_debat import GrandDebatConnector
 from ingestion.sources.insee import InseeEmploiConnector, InseeFilosofiConnector
+from ingestion.sources.insee_population import InseePopulationConnector
 from ingestion.sources.transport import SncfStationsConnector
 
 CONNECTORS: dict[str, type[SourceConnector]] = {
@@ -19,6 +20,7 @@ CONNECTORS: dict[str, type[SourceConnector]] = {
         DvfConnector,
         InseeFilosofiConnector,
         InseeEmploiConnector,
+        InseePopulationConnector,
         DpeConnector,
         GeorisquesConnector,
         SncfStationsConnector,

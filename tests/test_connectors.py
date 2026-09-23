@@ -10,9 +10,9 @@ import pyarrow as pa
 import pyarrow.parquet as pq
 import pytest
 
+from homepedia.ledger import RunStats
 from homepedia.settings import Settings
 from ingestion.connectors.base import RawFile, SourceConnector
-from ingestion.connectors.ledger import RunStats
 from ingestion.pipelines.registry import CONNECTORS
 from ingestion.sources.dvf import DvfConnector
 from ingestion.sources.education import EducationConnector
@@ -105,6 +105,7 @@ def test_registry_is_complete_and_ordered() -> None:
         "dvf",
         "insee_filosofi",
         "insee_emploi",
+        "insee_population",
         "dpe",
         "georisques",
         "sncf_stations",

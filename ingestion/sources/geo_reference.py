@@ -17,6 +17,7 @@ CONTOURS = "https://etalab-datasets.geo.data.gouv.fr/contours-administratifs/202
 
 class GeoReferenceConnector(SourceConnector):
     name = "geo_reference"
+    version = "2"  # + postal_codes
     not_null = {
         "regions": ("region_code", "name"),
         "departments": ("department_code", "region_code", "name"),
@@ -28,7 +29,7 @@ class GeoReferenceConnector(SourceConnector):
         yield "departements.json", f"{GEO_API}/departements"
         yield (
             "communes.json",
-            f"{GEO_API}/communes?fields=nom,code,codeDepartement,codeRegion,centre,population,surface&format=json",
+            f"{GEO_API}/communes?fields=nom,code,codeDepartement,codeRegion,centre,population,surface,codesPostaux&format=json",
         )
         yield "regions-100m.geojson", f"{CONTOURS}/regions-100m.geojson"
         yield "departements-100m.geojson", f"{CONTOURS}/departements-100m.geojson"
@@ -71,6 +72,9 @@ class GeoReferenceConnector(SourceConnector):
                     "latitude": pa.array(
                         [c["centre"]["coordinates"][1] if "centre" in c else None for c in communes],
                         pa.float64(),
+                    ),
+                    "postal_codes": pa.array(
+                        [c.get("codesPostaux", []) for c in communes], pa.list_(pa.string())
                     ),
                     "geometry_geojson": [geoms["communes"].get(c["code"]) for c in communes],
                 }

@@ -11,3 +11,4 @@ notebooks/.ipynb_checkpoints/
 spark-warehouse/
 *.log
 .DS_Store
+.omc/

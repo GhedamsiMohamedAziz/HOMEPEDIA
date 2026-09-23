@@ -19,10 +19,10 @@ import pyarrow as pa
 import pyarrow.compute as pc
 import pyarrow.parquet as pq
 
+from homepedia.ledger import RunStats, record_run
 from homepedia.logging import get_logger
 from homepedia.settings import Settings
 from ingestion.connectors.http import download
-from ingestion.connectors.ledger import RunStats, record_run
 
 log = get_logger("ingestion")
 

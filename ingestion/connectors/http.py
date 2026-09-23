@@ -31,17 +31,25 @@ def _open(url: str, timeout: int, retries: int = 3) -> Any:
     raise AssertionError("unreachable")
 
 
-def download(url: str, dest: Path, timeout: int) -> str:
+def download(url: str, dest: Path, timeout: int, retries: int = 3) -> str:
     """Stream `url` to `dest` (atomic via .part), return the sha256 hex digest."""
     dest.parent.mkdir(parents=True, exist_ok=True)
     part = dest.with_suffix(dest.suffix + ".part")
-    digest = hashlib.sha256()
-    with _open(url, timeout) as resp, part.open("wb") as fh:
-        while chunk := resp.read(1 << 20):
-            fh.write(chunk)
-            digest.update(chunk)
-    part.replace(dest)
-    return digest.hexdigest()
+    for attempt in range(retries + 1):
+        digest = hashlib.sha256()
+        try:
+            with _open(url, timeout) as resp, part.open("wb") as fh:
+                while chunk := resp.read(1 << 20):
+                    fh.write(chunk)
+                    digest.update(chunk)
+        except (TimeoutError, ConnectionError, urllib.error.URLError):
+            if attempt == retries:  # slow public servers stall mid-stream; restart the transfer
+                raise
+            time.sleep(2**attempt)
+            continue
+        part.replace(dest)
+        return digest.hexdigest()
+    raise AssertionError("unreachable")
 
 
 def get_json(url: str, timeout: int) -> Any:

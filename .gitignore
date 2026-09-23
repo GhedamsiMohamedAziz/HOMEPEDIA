@@ -1,0 +1,13 @@
+__pycache__/
+*.pyc
+.venv/
+.env
+.mypy_cache/
+.ruff_cache/
+.pytest_cache/
+data/*/*
+!data/*/.gitkeep
+notebooks/.ipynb_checkpoints/
+spark-warehouse/
+*.log
+.DS_Store
